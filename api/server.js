@@ -18,7 +18,7 @@ const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
 // ✅ Serve React static files
-const clientPath = path.join(__dirname, 'client/build');
+const clientPath = path.join(__dirname, '../client/build');
 app.use(express.static(clientPath));
 
 // ✅ Parse JSON body for all non-webhook routes
