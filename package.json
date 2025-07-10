@@ -1,0 +1,26 @@
+{
+  "name": "autodevelop-chatbot",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kev7n11f/autodevelop-chatbot.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kev7n11f/autodevelop-chatbot/issues"
+  },
+  "homepage": "https://github.com/kev7n11f/autodevelop-chatbot#readme",
+  "description": "Node.js chatbot application with Express; entry point is server.js.",
+  "dependencies": {
+    "body-parser": "^2.2.0",
+    "express": "^5.1.0",
+    "openai": "^5.8.2",
+    "stripe": "^18.3.0"
+  }
+}
