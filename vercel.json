@@ -11,7 +11,6 @@
     { "src": "/api/chat", "dest": "/api/chat.js" },
     { "src": "/api/webhook", "dest": "/api/webhook.js" },
     { "src": "/api/success", "dest": "/api/success.js" },
-    { "src": "/api/cancel", "dest": "/api/cancel.js" },
-    { "src": "/(.*)", "dest": "/client/build/index.html" }
+    { "src": "/api/cancel", "dest": "/api/cancel.js" }
   ]
 }
