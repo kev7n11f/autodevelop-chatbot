@@ -2,10 +2,16 @@
   "version": 2,
   "builds": [
     { "src": "client/package.json", "use": "@vercel/static-build" },
-    { "src": "api/server.js", "use": "@vercel/node" }
+    { "src": "api/chat.js", "use": "@vercel/node" },
+    { "src": "api/webhook.js", "use": "@vercel/node" },
+    { "src": "api/success.js", "use": "@vercel/node" },
+    { "src": "api/cancel.js", "use": "@vercel/node" }
   ],
   "routes": [
-    { "src": "/api/(.*)", "dest": "/api/server.js" },
+    { "src": "/api/chat", "dest": "/api/chat.js" },
+    { "src": "/api/webhook", "dest": "/api/webhook.js" },
+    { "src": "/api/success", "dest": "/api/success.js" },
+    { "src": "/api/cancel", "dest": "/api/cancel.js" },
     { "src": "/(.*)", "dest": "/client/build/index.html" }
   ]
 }
