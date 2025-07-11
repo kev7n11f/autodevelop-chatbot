@@ -16,7 +16,7 @@ module.exports = async (req, res) => {
   }
 
   // Log contact data to a file
-  const logFilePath = path.join(__dirname, '../logs/contact_logs.json'); // Use a persistent local file
+  const logFilePath = path.join(__dirname, '../logs/contact_logs.json'); // Use persistent 'logs/' directory
   const logEntry = { name, email, telephone, subject, msg, timestamp: new Date().toISOString() };
   try {
     fs.mkdirSync(path.dirname(logFilePath), { recursive: true }); // Ensure the directory exists

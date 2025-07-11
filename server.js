@@ -8,13 +8,14 @@ const PORT = process.env.PORT || 3000;
 
 // Middleware to log visitor details
 app.use((req, res, next) => {
-  const logFilePath = path.join(os.tmpdir(), 'visitor_logs.json'); // Use temporary directory for logs
+  const logFilePath = path.join(__dirname, 'logs/visitor_logs.json'); // Use persistent 'logs/' directory
   const logEntry = {
     ip: req.ip,
     userAgent: req.headers['user-agent'],
     timestamp: new Date().toISOString()
   };
   try {
+    fs.mkdirSync(path.dirname(logFilePath), { recursive: true }); // Ensure the directory exists
     const existingLogs = fs.existsSync(logFilePath) ? JSON.parse(fs.readFileSync(logFilePath, 'utf8')) : [];
     existingLogs.push(logEntry);
     fs.writeFileSync(logFilePath, JSON.stringify(existingLogs, null, 2));
