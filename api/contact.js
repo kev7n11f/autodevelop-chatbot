@@ -19,8 +19,13 @@ module.exports = async (req, res) => {
     return;
   }
   const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: { user, pass }
+    host: 'mail.smtp2go.com',
+    port: 587,
+    secure: false, // Use TLS
+    auth: {
+      user, // SMTP2GO username from environment variable
+      pass // SMTP2GO password from environment variable
+    }
   });
   try {
     await transporter.sendMail({
