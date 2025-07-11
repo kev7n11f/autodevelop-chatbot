@@ -162,3 +162,32 @@ h1 {
 .modal .modal-btn:hover {
   background: #1560b3;
 }
+
+.chat-history {
+  max-height: 300px;
+  overflow-y: auto;
+  margin-bottom: 1rem;
+  padding-right: 10px;
+}
+
+.chat-bubble {
+  padding: 0.8rem 1rem;
+  border-radius: 12px;
+  margin-bottom: 0.5rem;
+  max-width: 70%;
+  word-wrap: break-word;
+}
+
+.chat-bubble.user {
+  background: #1976d2;
+  color: #fff;
+  align-self: flex-end;
+  margin-left: auto;
+}
+
+.chat-bubble.assistant {
+  background: #333;
+  color: #fff;
+  align-self: flex-start;
+  margin-right: auto;
+}

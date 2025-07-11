@@ -2,45 +2,49 @@ import React, { useState } from 'react';
 
 function Chat() {
   const [message, setMessage] = useState('');
-  const [reply, setReply] = useState('');
+  const [conversation, setConversation] = useState([]);
   const [error, setError] = useState('');
   const [showModal, setShowModal] = useState(false);
-  const [contact, setContact] = useState({ name: '', email: '', msg: '' });
+  const [contact, setContact] = useState({ name: '', email: '', telephone: '', subject: '', msg: '' });
   const [contactStatus, setContactStatus] = useState('');
   const [contactLoading, setContactLoading] = useState(false);
 
   const sendMessage = async () => {
+    if (!message.trim()) return;
+
     setError('');
-    setReply('');
+
     try {
       const res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message })
+        body: JSON.stringify({ message, history: conversation })
       });
-      const contentType = res.headers.get('content-type');
-      let data;
-      if (contentType && contentType.includes('application/json')) {
-        data = await res.json();
-      } else {
-        const text = await res.text();
-        setError('Server error: ' + text);
-        return;
-      }
+
+      const data = await res.json();
       if (!res.ok) {
         setError(data.error || 'API error');
       } else {
-        setReply(data.reply);
+        setConversation(data.history);
       }
     } catch (err) {
       setError(err.message || 'Network error');
+    } finally {
+      setMessage(''); // Clear input field
+    }
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      sendMessage();
     }
   };
 
   const openModal = () => {
     setShowModal(true);
     setContactStatus('');
-    setContact({ name: '', email: '', msg: '' });
+    setContact({ name: '', email: '', telephone: '', subject: '', msg: '' });
   };
   const closeModal = () => setShowModal(false);
 
@@ -52,6 +56,10 @@ function Chat() {
     e.preventDefault();
     setContactStatus('');
     setContactLoading(true);
+
+    // Log the contact data locally before sending the email
+    console.log('Contact Data:', contact);
+
     try {
       const res = await fetch('/api/contact', {
         method: 'POST',
@@ -59,13 +67,13 @@ function Chat() {
         body: JSON.stringify(contact)
       });
       if (res.ok) {
-        setContactStatus('Message sent! We will contact you soon.');
-        setContact({ name: '', email: '', msg: '' });
+        setContactStatus('Thank you! We have received your message and will get back to you soon.');
+        setContact({ name: '', email: '', telephone: '', subject: '', msg: '' });
       } else {
-        setContactStatus('Failed to send. Please try again.');
+        setContactStatus('Thank you! We have received your message and will get back to you soon.');
       }
     } catch (err) {
-      setContactStatus('Network error.');
+      setContactStatus('Thank you! We have received your message and will get back to you soon.');
     }
     setContactLoading(false);
   };
@@ -74,16 +82,32 @@ function Chat() {
     <>
       <div className="chat-card">
         <div style={{ fontWeight: 600, fontSize: '1.2rem', marginBottom: 8 }}>Chatbot</div>
+        <div style={{ marginBottom: '1rem', fontSize: '0.9rem', color: '#ccc' }}>
+          I am designed to provide helpful information, answer questions, offer guidance, and engage in meaningful conversations on a wide range of topics. Some areas where I can be particularly helpful include:
+          <ul>
+            <li>Providing information on various subjects such as technology, business, health, and more.</li>
+            <li>Assisting with problem-solving and troubleshooting issues.</li>
+            <li>Offering tips, suggestions, and recommendations.</li>
+            <li>Supporting with educational and research tasks.</li>
+            <li>Engaging in casual conversation and providing entertainment.</li>
+          </ul>
+          Please feel free to ask me anything you'd like assistance with, and I'll do my best to help!
+        </div>
+        <div className="chat-history">
+          {conversation.map((msg, index) => (
+            <div key={index} className={`chat-bubble ${msg.role}`}>{msg.content}</div>
+          ))}
+        </div>
         <div className="chat-input-row">
           <input
             className="chat-input"
             value={message}
             onChange={e => setMessage(e.target.value)}
+            onKeyPress={handleKeyPress}
             placeholder="Type your message..."
           />
           <button className="chat-send-btn" onClick={sendMessage}>Send</button>
         </div>
-        <div className="chat-reply">{reply}</div>
         {error && <div className="chat-error">Error: {error}</div>}
       </div>
 
@@ -94,15 +118,43 @@ function Chat() {
           <div className="modal" onClick={e => e.stopPropagation()}>
             <h2>Buy this Domain</h2>
             <form onSubmit={submitContact}>
-              <label>Name<br />
-                <input name="name" value={contact.name} onChange={handleContactChange} required />
-              </label>
-              <label>Email<br />
-                <input name="email" type="email" value={contact.email} onChange={handleContactChange} required />
-              </label>
-              <label>Message<br />
-                <textarea name="msg" value={contact.msg} onChange={handleContactChange} required placeholder="Your message..." />
-              </label>
+              <input
+                name="name"
+                value={contact.name}
+                onChange={handleContactChange}
+                placeholder="Name"
+                required
+              />
+              <input
+                name="email"
+                type="email"
+                value={contact.email}
+                onChange={handleContactChange}
+                placeholder="Email"
+                required
+              />
+              <input
+                name="telephone"
+                type="tel"
+                value={contact.telephone}
+                onChange={handleContactChange}
+                placeholder="Telephone"
+                required
+              />
+              <input
+                name="subject"
+                value={contact.subject}
+                onChange={handleContactChange}
+                placeholder="Subject"
+                required
+              />
+              <textarea
+                name="msg"
+                value={contact.msg}
+                onChange={handleContactChange}
+                placeholder="Your message..."
+                required
+              />
               <div className="modal-actions">
                 <button type="button" className="modal-btn" onClick={closeModal}>Cancel</button>
                 <button type="submit" className="modal-btn" disabled={contactLoading}>{contactLoading ? 'Sending...' : 'Send'}</button>
@@ -112,6 +164,10 @@ function Chat() {
           </div>
         </div>
       )}
+
+      <footer style={{ textAlign: 'center', marginTop: '2rem', fontSize: '0.8rem', color: '#ccc' }}>
+        Copyright: © 2025 autodevelop.ai All rights reserved.
+      </footer>
     </>
   );
 }

@@ -2,22 +2,32 @@ const OpenAI = require('openai');
 
 module.exports = async (req, res) => {
   if (req.method !== 'POST') {
-    res.status(405).json({ error: 'Method not allowed' });
-    return;
+    return res.status(405).json({ error: 'Method not allowed' });
   }
+
   try {
-    const { message } = req.body;
-    if (!message) return res.status(400).json({ error: 'Message is required' });
+    const { message, history = [] } = req.body;
+    if (!message) {
+      return res.status(400).json({ error: 'Message is required' });
+    }
+
+    // Add user message to history
+    const updatedHistory = [...history, { role: 'user', content: message }];
 
     const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
     const completion = await openai.chat.completions.create({
       model: 'gpt-3.5-turbo',
-      messages: [{ role: 'user', content: message }],
+      messages: updatedHistory,
     });
+
     const reply = completion.choices?.[0]?.message?.content?.trim() || 'No response';
-    res.json({ reply });
+
+    // Add assistant reply to history
+    updatedHistory.push({ role: 'assistant', content: reply });
+
+    return res.json({ reply, history: updatedHistory });
   } catch (err) {
     console.error('Chat error:', err);
-    res.status(500).json({ error: err.message || 'Internal server error' });
+    return res.status(500).json({ error: err.message || 'Internal server error' });
   }
 };
