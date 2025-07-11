@@ -14,7 +14,15 @@ function Chat() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message })
       });
-      const data = await res.json();
+      const contentType = res.headers.get('content-type');
+      let data;
+      if (contentType && contentType.includes('application/json')) {
+        data = await res.json();
+      } else {
+        const text = await res.text();
+        setError('Server error: ' + text);
+        return;
+      }
       if (!res.ok) {
         setError(data.error || 'API error');
       } else {
