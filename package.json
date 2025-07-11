@@ -17,7 +17,7 @@
   "bugs": {
     "url": "https://github.com/kev7n11f/autodevelop-chatbot/issues"
   },
-  "homepage": "https://github.com/kev7n11f/autodevelop-chatbot#readme",
+  // ...existing code...
   "description": "Node.js chatbot application with Express; entry point is server.js.",
   "dependencies": {
     "@testing-library/dom": "^10.4.0",
