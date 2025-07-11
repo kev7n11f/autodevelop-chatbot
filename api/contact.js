@@ -2,6 +2,7 @@
 const nodemailer = require('nodemailer');
 const fs = require('fs');
 const path = require('path');
+const os = require('os');
 
 module.exports = async (req, res) => {
   if (req.method !== 'POST') {
@@ -15,12 +16,14 @@ module.exports = async (req, res) => {
   }
 
   // Log contact data to a file
-  const logFilePath = path.join(__dirname, 'contact_logs.json');
+  const logFilePath = path.join(__dirname, '../logs/contact_logs.json'); // Use a persistent local file
   const logEntry = { name, email, telephone, subject, msg, timestamp: new Date().toISOString() };
   try {
+    fs.mkdirSync(path.dirname(logFilePath), { recursive: true }); // Ensure the directory exists
     const existingLogs = fs.existsSync(logFilePath) ? JSON.parse(fs.readFileSync(logFilePath, 'utf8')) : [];
     existingLogs.push(logEntry);
     fs.writeFileSync(logFilePath, JSON.stringify(existingLogs, null, 2));
+    console.log('Log written to:', logFilePath);
   } catch (err) {
     console.error('Failed to log contact data:', err);
   }
@@ -57,7 +60,7 @@ module.exports = async (req, res) => {
 
   try {
     await transporter.sendMail({
-      from: user,
+      from: 'autodevelop@cbsdelivery.com', // Use the correct email address
       to: 'kev7n11@outlook.com',
       subject: `BUY THIS DOMAIN MSG: ${subject}`,
       text: `Name: ${name}\nEmail: ${email}\nTelephone: ${telephone}\nSubject: ${subject}\nMessage: ${msg}`

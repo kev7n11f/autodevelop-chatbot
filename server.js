@@ -1,8 +1,29 @@
 // server.js
 const express = require('express');
 const path = require('path');
+const fs = require('fs');
+const os = require('os');
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// Middleware to log visitor details
+app.use((req, res, next) => {
+  const logFilePath = path.join(os.tmpdir(), 'visitor_logs.json'); // Use temporary directory for logs
+  const logEntry = {
+    ip: req.ip,
+    userAgent: req.headers['user-agent'],
+    timestamp: new Date().toISOString()
+  };
+  try {
+    const existingLogs = fs.existsSync(logFilePath) ? JSON.parse(fs.readFileSync(logFilePath, 'utf8')) : [];
+    existingLogs.push(logEntry);
+    fs.writeFileSync(logFilePath, JSON.stringify(existingLogs, null, 2));
+    console.log('Visitor log written to:', logFilePath);
+  } catch (err) {
+    console.error('Failed to log visitor data:', err);
+  }
+  next();
+});
 
 // Serve static files from the React build folder with aggressive caching for static assets
 app.use(express.static(path.join(__dirname, 'build'), {
