@@ -17,18 +17,20 @@
   "bugs": {
     "url": "https://github.com/kev7n11f/autodevelop-chatbot/issues"
   },
-
   "description": "Node.js chatbot application with Express; entry point is server.js.",
   "dependencies": {
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^13.5.0",
+    "express": "^4.21.2",
+    "nodemailer": "^7.0.5",
+    "openai": "^4.0.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-scripts": "5.0.1",
-    "web-vitals": "^2.1.4",
-    "openai": "^4.0.0"
+    "stripe": "^18.3.0",
+    "web-vitals": "^2.1.4"
   },
   "browserslist": {
     "production": [

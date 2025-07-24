@@ -1,10 +1,8 @@
+const express = require('express');
 const OpenAI = require('openai');
+const router = express.Router();
 
-module.exports = async (req, res) => {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
-
+router.post('/', async (req, res) => {
   try {
     const { message, history = [] } = req.body;
     if (!message) {
@@ -30,4 +28,6 @@ module.exports = async (req, res) => {
     console.error('Chat error:', err);
     return res.status(500).json({ error: err.message || 'Internal server error' });
   }
-};
+});
+
+module.exports = router;

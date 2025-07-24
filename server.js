@@ -6,6 +6,15 @@ const os = require('os');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// API Routes
+app.use('/api/chat', require('./api/chat'));
+app.use('/api/contact', require('./api/contact'));
+app.use('/api/webhook', require('./api/webhook'));
+
 // Middleware to log visitor details
 app.use((req, res, next) => {
   const logFilePath = path.join(__dirname, 'logs/visitor_logs.json'); // Use persistent 'logs/' directory

@@ -1,14 +1,11 @@
-// api/contact.js
+const express = require('express');
 const nodemailer = require('nodemailer');
 const fs = require('fs');
 const path = require('path');
 const os = require('os');
+const router = express.Router();
 
-module.exports = async (req, res) => {
-  if (req.method !== 'POST') {
-    res.status(405).json({ error: 'Method not allowed' });
-    return;
-  }
+router.post('/', async (req, res) => {
   const { name, email, telephone, subject, msg } = req.body || {};
   if (!name || !email || !telephone || !subject || !msg) {
     res.status(400).json({ error: 'All fields required' });
@@ -70,4 +67,6 @@ module.exports = async (req, res) => {
     console.error('Failed to send email:', err);
     res.status(500).json({ error: 'Failed to send email' });
   }
-};
+});
+
+module.exports = router;
