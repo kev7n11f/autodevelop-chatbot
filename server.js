@@ -14,6 +14,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api/chat', require('./api/chat'));
 app.use('/api/contact', require('./api/contact'));
 app.use('/api/webhook', require('./api/webhook'));
+app.use('/api/theme', require('./api/theme'));
 
 // Middleware to log visitor details
 app.use((req, res, next) => {
