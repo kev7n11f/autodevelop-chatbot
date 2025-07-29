@@ -30,7 +30,11 @@ router.post('/', (req, res) => {
       return res.status(400).json({ error: 'Valid theme required (dark or light)' });
     }
     
-    const themePath = path.join(__dirname, '../logs/theme_settings.json');
+    const baseDir = path.resolve(__dirname, '../logs');
+    const themePath = path.resolve(baseDir, 'theme_settings.json');
+    if (!themePath.startsWith(baseDir)) {
+      throw new Error('Invalid theme path');
+    }
     const themeData = { theme, updatedAt: new Date().toISOString() };
     
     // Ensure directory exists
