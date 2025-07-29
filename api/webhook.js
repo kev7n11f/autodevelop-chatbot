@@ -1,11 +1,8 @@
+const express = require('express');
 const Stripe = require('stripe');
-const bodyParser = require('body-parser');
+const router = express.Router();
 
-module.exports = async (req, res) => {
-  if (req.method !== 'POST') {
-    res.status(405).json({ error: 'Method not allowed' });
-    return;
-  }
+router.post('/', async (req, res) => {
   const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
   const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
   let event;
@@ -24,4 +21,6 @@ module.exports = async (req, res) => {
     console.error('🚨 Webhook verification failed:', err.message);
     res.status(400).send(`Webhook Error: ${err.message}`);
   }
-};
+});
+
+module.exports = router;
