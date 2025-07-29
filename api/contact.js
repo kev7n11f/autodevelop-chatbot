@@ -68,7 +68,7 @@ router.post('/', async (req, res) => {
       return res.status(500).json({ error: 'Email service not configured' });
     }
 
-    const transporter = nodemailer.createTransporter({
+    const transporter = nodemailer.createTransport({
       host: 'mail.smtp2go.com',
       port: 587,
       secure: false,
