@@ -83,7 +83,8 @@ function Chat() {
       <div className="chat-card">
         <div style={{ fontWeight: 600, fontSize: '1.2rem', marginBottom: 8 }}>Chatbot</div>
         <div style={{ marginBottom: '1rem', fontSize: '0.9rem', color: '#ccc' }}>
-          I am designed to provide helpful information, answer questions, offer guidance, and engage in meaningful conversations on a wide range of topics. Some areas where I can be particularly helpful include:
+        I am designed to assist in developing software, apps, websites, etc. I can walk you through the steps as well as drop code for whatever programing language you wish. Let's get to work!          
+        I can also provide helpful information, answer questions, offer guidance, and engage in meaningful conversations on a wide range of topics. Some areas where I can be particularly helpful include:
           <ul>
             <li>Providing information on various subjects such as technology, business, health, and more.</li>
             <li>Assisting with problem-solving and troubleshooting issues.</li>
